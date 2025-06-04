@@ -32,31 +32,37 @@ def netWorth():
             return jsonify({"error": "No net worth data provided"}), 400
 
         logger.info("Start GPT analysis")
+        logger.info("Model is gpt-4o-search-preview")
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-search-preview",
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a financial advisor AI. Analyze net worth data and provide concise, actionable insights. 
-                    Format your response using markdown-style formatting:
-                    - Use **bold** for headers and key points
-                    - Use bullet points for lists
-                    - Keep analysis brief but insightful
-                    - Focus on trends, key observations, and 1-2 actionable recommendations
-                    - Limit response to 150-200 words"""
+                    "content": """You are a financial advisor AI specifically for Singapore residents. Analyze net worth data within Singapore's financial context. 
+                Format your response using markdown-style formatting:
+                - Use **bold** for headers and key points
+                - Use bullet points for lists
+                - Keep analysis brief but insightful
+                - Focus on trends and key observations only with no recommendations
+                - Consider Singapore's financial landscape (CPF, property market, etc.) when relevant
+                - If age information is provided, consider it in your analysis for context
+                - If no age is mentioned, do not make assumptions about the user's age
+                - Limit response to 150-200 words
+                - Do NOT include any external links, URLs, or images in your response
+                - Provide text-only analysis"""
                 },
                 {
                     "role": "user",
-                    "content": f"""Please analyze this net worth historical data and provide a brief financial health summary:
+                    "content": f"""Please analyze this net worth historical data for a Singapore resident and provide a brief financial health summary:
 
-**Data:** {user_input}
+                **Data:** {user_input}
 
-Please provide:
-1. **Overall Trend** - Is wealth growing/declining?
-2. **Key Observations** - Notable patterns or changes
-3. **Quick Recommendation** - One actionable insight
+                Please provide:
+                1. **Overall Trend** - Is wealth growing/declining?
+                2. **Key Observations** - Notable patterns or changes within Singapore context
+                3. **Age Context** - Only if age information is available in the data
 
-Keep it concise and easy to read at a glance."""
+                Keep it concise, Singapore-focused, and text-only with no external references such as links, URLs, or images ."""
                 },
             ],
         )
