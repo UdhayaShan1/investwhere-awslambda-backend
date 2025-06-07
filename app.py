@@ -159,11 +159,11 @@ Response Structure:
     }
   },
   "feedback": {
-    "portfolioStrategy": "Comprehensive explanation covering allocation strategy, key considerations, how user comments influenced recommendations, risk alignment, and Singapore-specific factors applied. Include percentage breakdown of broad categories (e.g., **Bank: 30%, Robos: 45%, Investments: 20%**). Use markdown formatting with **bold** and ## headers.",
-    "projectedReturns": "Detailed breakdown showing: **Weighted Average Return**: X.X% per annum (based on current web search data), **Calculation**: Show how each component contributes with current market data, **Portfolio Projection**: Current $X projected to $Y over Z years using compound growth, **Sources**: Cite specific websites and dates for each return assumption. Use markdown formatting with **bold** and ## headers.",
+    "portfolioStrategy": "Write in a conversational tone directly addressing the user with 'you' and 'your'. Explain your allocation strategy, how I've distributed your portfolio across categories (e.g., **Your allocation: Bank 30%, Robos 45%, Investments 20%**), why this aligns with your risk profile, and how your specific comments influenced my recommendations. Use markdown formatting with **bold** and ## headers.",
+    "projectedReturns": "Address the user directly with 'you' and 'your portfolio'. Explain: **Your Expected Return**: X.X% per annum, **How I calculated this**: Show how each of your portfolio components contributes, **Your Portfolio Projection**: Your current $X is projected to grow to $Y over Z years, **My Sources**: Cite the specific websites and dates I used for your return assumptions. Use markdown formatting with **bold** and ## headers.",
     "searchDate": "YYYY-MM-DD",
-    "marketInsights": "Recent market conditions or trends that influenced recommendations",
-    "sources": ["Brief description of key data sources consulted", "Current interest rates/market data referenced", "Singapore financial product updates considered"]
+    "marketInsights": "Recent market conditions or trends that influenced your recommendations",
+    "sources": ["Brief description of key data sources consulted for your portfolio", "Current interest rates/market data referenced for your recommendations", "Singapore financial product updates considered for your situation"]
   }
 }
 
@@ -175,7 +175,7 @@ IMPORTANT RULES:
 5. **MANDATORY WEB SEARCH**: You MUST use web search to get current data - do NOT rely on hardcoded assumptions
 6. **DOCUMENT SOURCES**: Include the search date and brief descriptions of key data sources used in your research
 7. **CPF EXCLUSION**: Do NOT include CPF allocations UNLESS specifically mentioned in the additionalComments field
-8. **FORMATTED SECTIONS**: Write portfolioStrategy and projectedReturns as comprehensive paragraphs using markdown formatting (**bold** and ## headers only)
+8. **CONVERSATIONAL TONE**: Write portfolioStrategy and projectedReturns directly addressing the user with "you", "your", and "I recommend" style language
 
 WEB SEARCH REQUIREMENTS - MANDATORY:
 - **ALL return assumptions MUST come from current web search results**
@@ -236,17 +236,17 @@ CRITICAL REQUIREMENTS:
 8. **Document Research**: Include search date and sources in feedback to confirm current data was used
 9. **CPF Rule**: Do NOT include CPF allocations unless the user specifically mentions CPF in their additionalComments
 
-For the feedback sections, provide comprehensive explanations using markdown formatting (**bold** and ## headers only):
+For the feedback sections, write in a conversational tone directly addressing the user using markdown formatting (**bold** and ## headers only):
 
 ## Portfolio Strategy Section:
-Explain the overall allocation strategy, percentage breakdown of broad categories (e.g., **Bank: 30%, Robos: 45%, Investments: 20%**), risk alignment, and how user comments influenced recommendations.
+Address the user directly: "Based on your profile, I've designed your allocation strategy..." Explain how you distributed their money across categories (e.g., **Your allocation: Bank 30%, Robos 45%, Investments 20%**), why this suits their risk profile, and how their specific comments shaped your recommendations.
 
 ## Projected Returns Section:
-Provide detailed breakdown showing:
-- **Weighted Average Return**: X.X% per annum (based on current web search data)
-- **Calculation**: Show how each component contributes with current market data
-- **Portfolio Projection**: Current $X projected to $Y over Z years using compound growth
-- **Sources**: Cite specific websites and dates for each return assumption
+Speak directly to the user about their portfolio:
+- **Your Expected Return**: X.X% per annum (based on current market data I researched)
+- **How I calculated your returns**: Show how each component of their portfolio contributes
+- **Your Portfolio Projection**: "Your current $X is projected to grow to $Y over Z years"
+- **My Research Sources**: Cite the specific websites and dates used for their return assumptions
 
 SEARCH REQUIREMENTS - MANDATORY:
 - Search for latest Singapore market conditions and economic outlook
@@ -264,7 +264,7 @@ Focus recommendations on:
 - Cryptocurrency (if appropriate for risk profile)
 - Other alternative investments
 
-**CRITICAL**: All return assumptions, market data, and product information MUST come from current web search results. Do NOT use any hardcoded or assumed values.
+**CRITICAL**: All return assumptions, market data, and product information MUST come from current web search results. Write everything in a conversational tone addressing the user directly.
 
 Return ONLY the JSON object with both recommendation and feedback sections."""
                 }
