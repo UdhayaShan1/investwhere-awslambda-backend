@@ -131,6 +131,47 @@ Response Structure:
           "cashPlusFlexi": number,
           "cashPlusGuranteed": number
         }
+      },
+      "Endowus": {
+        "core": {
+          "flagshipTotal": number,
+          "flagshipVeryConservative": number,
+          "flagshipConservative": number,
+          "flagshipMeasured": number,
+          "flagshipBalanced": number,
+          "flagshipAggressive": number,
+          "flagshipVeryAggressive": number,
+          "esgTotal": number,
+          "esgVeryConservative": number,
+          "esgConservative": number,
+          "esgMeasured": number,
+          "esgBalanced": number,
+          "esgAggressive": number,
+          "esgVeryAggressive": number,
+          "factorsTotal": number,
+          "factorsVeryConservative": number,
+          "factorsConservative": number,
+          "factorsMeasured": number,
+          "factorsBalanced": number,
+          "factorsAggressive": number,
+          "factorsVeryAggressive": number
+        },
+        "satellite": {
+          "technology": number,
+          "chinaEquities": number,
+          "realAssets": number,
+          "megatrends": number
+        },
+        "cashSmart": {
+          "secure": number,
+          "enhanced": number,
+          "ultra": number
+        },
+        "income": {
+          "stableIncome": number,
+          "higherIncome": number,
+          "futureIncome": number
+        }
       }
     },
     "Investments": {
@@ -183,7 +224,7 @@ WEB SEARCH REQUIREMENTS - MANDATORY:
 - **ALL interest rates MUST be searched and verified**
 - **ALL platform performance data MUST be current from web search**
 - **DO NOT use any hardcoded return estimates**
-- **Search for latest Roboadvisors performance, broker fees, market conditions**
+- **Search for latest Syfe and Endowus performance, broker fees, market conditions**
 - **Search for current Singapore financial market updates**
 - **Verify all product availability and current offerings**
 
@@ -194,7 +235,7 @@ Singapore Context Guidelines:
 - Emergency fund: Basic savings accounts for accessibility, not growth
 - Popular brokers: Tiger, moomoo, Interactive Brokers
 - Banks: ONLY DBS, UOB, or OCBC - basic savings accounts for emergency funds only
-- Syfe portfolios based on risk profile
+- Robo-advisors: Syfe and Endowus portfolios based on risk profile
 
 Bank Guidelines:
 - **Emergency Fund Only**: Banks are for emergency funds and liquidity needs
@@ -207,6 +248,7 @@ Expected Return Guidelines - USE WEB SEARCH ONLY:
 - **SEARCH FOR CURRENT DATA**: Do NOT use hardcoded estimates
 - **Bank savings**: 0% return assumption (emergency fund, not investment)
 - **Syfe portfolios**: Search for latest performance data and historical returns
+- **Endowus portfolios**: Search for latest performance data and historical returns
 - **Singapore REITs**: Search for current market performance and yields
 - **Global equities**: Search for current market outlook and expected returns
 - **Bonds**: Search for current Singapore bond yields and rates
@@ -214,9 +256,9 @@ Expected Return Guidelines - USE WEB SEARCH ONLY:
 - **ALL SOURCES MUST BE CITED**: Include specific websites and dates
 
 Risk Profile Mapping:
-- 0 (Low): Conservative, larger emergency fund, defensive investments
-- 1 (Medium): Balanced mix, moderate growth, standard emergency fund
-- 2 (High): Growth-focused, minimal emergency fund, aggressive portfolios
+- 0 (Low): Conservative, larger emergency fund, defensive investments (Syfe Defensive, Endowus Conservative)
+- 1 (Medium): Balanced mix, moderate growth, standard emergency fund (Syfe Balanced, Endowus Balanced)
+- 2 (High): Growth-focused, minimal emergency fund, aggressive portfolios (Syfe Growth/Equity100, Endowus Aggressive)
 - 3 (None): You will decide based on best practices for user's profile
 
 RESPONSE FORMAT: Return ONLY the JSON object with recommendation and feedback sections."""
@@ -229,7 +271,7 @@ Profile Data: """ + user_input + """
 
 CRITICAL REQUIREMENTS:
 1. **MANDATORY WEB SEARCH**: You MUST search for ALL current data - do NOT use any assumptions or hardcoded values
-2. **Search for Current Returns**: Get latest performance data for Syfe, brokers, market indices, interest rates
+2. **Search for Current Returns**: Get latest performance data for Syfe, Endowus, brokers, market indices, interest rates
 3. **Verify Product Availability**: Search for current Singapore financial products and offerings
 4. **Heed Additional Comments**: The additionalComments field contains the user's specific requirements - this MUST be the primary driver of your recommendations
 5. **Omit Zero Allocations**: Do not include any components, accounts, or portfolios with $0 allocations
@@ -254,6 +296,7 @@ Speak directly to the user about their portfolio:
 SEARCH REQUIREMENTS - MANDATORY:
 - Search for latest Singapore market conditions and economic outlook
 - Search for current Syfe portfolio performance and historical returns  
+- Search for current Endowus portfolio performance and historical returns
 - Search for latest interest rates and bond yields in Singapore
 - Search for current broker fees and platform offerings
 - Search for recent market performance of recommended asset classes
@@ -262,7 +305,7 @@ SEARCH REQUIREMENTS - MANDATORY:
 
 Focus recommendations on:
 - Bank savings accounts (EMERGENCY FUND ONLY - basic accessibility) - ONLY DBS, UOB, or OCBC
-- Robo-advisor platforms (primary growth investments)
+- Robo-advisor platforms (primary growth investments) - Syfe and Endowus
 - Direct investments through brokers
 - Cryptocurrency (if appropriate for risk profile)
 - Other alternative investments
@@ -364,6 +407,7 @@ Expected Return Guidelines - USE WEB SEARCH ONLY:
 - **SEARCH FOR CURRENT DATA**: Do NOT use hardcoded estimates
 - **Bank savings**: 0% return assumption (emergency fund, not investment)
 - **Syfe portfolios**: Search for latest performance data and historical returns
+- **Endowus portfolios**: Search for latest performance data and historical returns
 - **Singapore REITs**: Search for current market performance and yields
 - **Global equities**: Search for current market outlook and expected returns
 - **Bonds**: Search for current Singapore bond yields and rates
