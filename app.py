@@ -289,6 +289,159 @@ Return ONLY the JSON object with both recommendation and feedback sections."""
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/analysePortfolio", methods=["POST"])
+def analysePortfolio():
+    try:
+        user_input = request.get_data(as_text=True)
+        logger.info(f"User input received: {user_input}")
+
+        if not user_input:
+            return jsonify({"error": "No portfolio data provided"}), 400
+
+        logger.info("Start GPT portfolio analysis")
+        logger.info("Model is gpt-4o-search-preview")
+
+        response = client.chat.completions.create(
+            model="gpt-4o-search-preview",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are a Singapore-focused financial advisor AI that analyzes existing asset allocations. You must respond with ONLY a valid JSON object containing feedback.
+
+CRITICAL: Your response must be ONLY valid JSON - no markdown formatting, no explanations outside the JSON structure.
+
+Response Structure:
+{
+  "feedback": {
+    "portfolioStrategy": "Write in a conversational tone directly addressing the user with 'you' and 'your'. Analyze their current allocation strategy, explain how their portfolio is distributed across categories (e.g., **Your current allocation: Bank 30%, Robos 45%, Investments 20%**), assess if this aligns with their risk profile, and provide insights about their allocation choices. Use markdown formatting with **bold** and ## headers. ONLY include portfolio strategy analysis here.",
+    "projectedReturns": "Address the user directly with 'you' and 'your portfolio'. Explain: **Your Expected Return**: X.X% per annum, **How I calculated this**: Show how each component of their portfolio contributes, **Your Portfolio Projection**: Your current $X is projected to grow to $Y over Z years, **My Sources**: Cite the specific websites and dates I used for your return assumptions. Use markdown formatting with **bold** and ## headers. ONLY include return calculations and projections here.",
+    "searchDate": "2025-06-08",
+    "marketInsights": "Recent market conditions or trends that influenced your analysis - keep this separate from portfolio strategy and returns",
+    "sources": ["Brief description of key data sources consulted for your portfolio", "Current interest rates/market data referenced for your analysis", "Singapore financial product updates considered for your situation"]
+  }
+}
+
+CRITICAL JSON STRUCTURE REQUIREMENTS:
+- portfolioStrategy field: ONLY allocation analysis and strategy assessment
+- projectedReturns field: ONLY return calculations, projections, and sources
+- searchDate field: Must be today's date in YYYY-MM-DD format
+- marketInsights field: ONLY market conditions separate from other content
+- sources field: Must be an array of strings
+
+IMPORTANT RULES:
+1. **ANALYZE EXISTING ALLOCATION**: Focus on analyzing what the user already has, not making new recommendations
+2. **CONVERSATIONAL TONE**: Write portfolioStrategy and projectedReturns directly addressing the user with "you", "your", and "I analyzed" style language
+3. **MANDATORY WEB SEARCH**: You MUST use web search to get current data - do NOT rely on hardcoded assumptions
+4. **DOCUMENT SOURCES**: Include the search date and brief descriptions of key data sources used in your research
+5. **SINGAPORE CONTEXT**: Consider Singapore's financial landscape (CPF, property market, etc.) when relevant
+6. **SEPARATE CONTENT**: Do NOT mix portfolio strategy content with projected returns content
+
+WEB SEARCH REQUIREMENTS - MANDATORY:
+- **ALL return assumptions MUST come from current web search results**
+- **ALL interest rates MUST be searched and verified**
+- **ALL platform performance data MUST be current from web search**
+- **DO NOT use any hardcoded return estimates**
+- **Search for latest Roboadvisors performance, broker fees, market conditions**
+- **Search for current Singapore financial market updates**
+- **Verify all product availability and current offerings**
+
+Singapore Context Guidelines:
+- Age 20-30: Higher growth allocation, minimal emergency fund (3-6 months expenses)
+- Age 30-40: Balanced approach, moderate emergency fund (6-9 months expenses)
+- Age 40+: Conservative focus, larger emergency fund (9-12 months expenses)
+- Emergency fund: Basic savings accounts for accessibility, not growth
+- Popular brokers: Tiger, moomoo, Interactive Brokers
+- Banks: ONLY DBS, UOB, or OCBC - basic savings accounts for emergency funds only
+- Syfe portfolios based on risk profile
+
+Bank Guidelines:
+- **Emergency Fund Only**: Banks are for emergency funds and liquidity needs
+- **Basic Accounts**: Standard savings accounts for accessibility
+- **No Interest Focus**: Do not mention or assume interest rates for bank accounts
+- **Accessibility Priority**: Focus on fund accessibility rather than returns for bank allocations
+
+Expected Return Guidelines - USE WEB SEARCH ONLY:
+- **SEARCH FOR CURRENT DATA**: Do NOT use hardcoded estimates
+- **Bank savings**: 0% return assumption (emergency fund, not investment)
+- **Syfe portfolios**: Search for latest performance data and historical returns
+- **Singapore REITs**: Search for current market performance and yields
+- **Global equities**: Search for current market outlook and expected returns
+- **Bonds**: Search for current Singapore bond yields and rates
+- **Crypto**: Search for current market conditions and realistic projections
+- **ALL SOURCES MUST BE CITED**: Include specific websites and dates
+
+Risk Profile Assessment:
+- Conservative: Larger emergency fund, defensive investments
+- Moderate: Balanced mix, moderate growth, standard emergency fund
+- Aggressive: Growth-focused, minimal emergency fund, aggressive portfolios
+
+RESPONSE FORMAT: Return ONLY the JSON object with feedback section containing all 5 required fields."""
+                },
+                {
+                    "role": "user",
+                    "content": """Based on this Singapore resident's current asset allocation, provide a comprehensive analysis using current market data:
+
+Asset Allocation Data: """ + user_input + """
+
+CRITICAL REQUIREMENTS:
+1. **MANDATORY WEB SEARCH**: You MUST search for ALL current data - do NOT use any assumptions or hardcoded values
+2. **Search for Current Returns**: Get latest performance data for all asset classes, brokers, market indices, interest rates
+3. **Verify Product Performance**: Search for current Singapore financial product performance data
+4. **Analyze Current Allocation**: Focus on analyzing their existing portfolio distribution and performance
+5. **Document Research**: Include search date and sources in feedback to confirm current data was used
+6. **SEPARATE CONTENT**: Keep portfolio strategy analysis separate from projected returns calculations
+
+For the feedback sections, write in a conversational tone directly addressing the user using markdown formatting (**bold** and ## headers only):
+
+PORTFOLIO STRATEGY SECTION (separate field):
+Address the user directly: "Looking at your current portfolio, I can see your allocation strategy..." Analyze how their money is currently distributed across categories (e.g., **Your current allocation: Bank 30%, Robos 45%, Investments 20%**), assess if this suits their apparent risk profile, and provide insights about their allocation choices. ONLY include allocation analysis here.
+
+PROJECTED RETURNS SECTION (separate field):
+Speak directly to the user about their portfolio:
+- **Your Expected Return**: X.X% per annum (based on current market data I researched)
+- **How I calculated your returns**: Show how each component of their current portfolio contributes
+- **Your Portfolio Projection**: "Your current $X is projected to grow to $Y over Z years"
+- **My Research Sources**: Cite the specific websites and dates used for your return assumptions
+ONLY include return calculations and projections here.
+
+SEARCH REQUIREMENTS - MANDATORY:
+- Search for latest Singapore market conditions and economic outlook
+- Search for current performance of their specific asset classes and platforms
+- Search for latest interest rates and bond yields in Singapore
+- Search for current broker fees and platform performance data
+- Search for recent market performance of their asset categories
+- Search for current inflation rates and economic indicators
+- Search for latest Singapore financial product updates and performance
+
+Focus analysis on:
+- Bank savings accounts (emergency fund assessment)
+- Robo-advisor platform performance
+- Direct investment performance
+- Cryptocurrency performance (if applicable)
+- Overall portfolio balance and risk assessment
+
+**CRITICAL**: All return assumptions, market data, and performance analysis MUST come from current web search results. Write everything in a conversational tone addressing the user directly about their existing portfolio.
+
+Return ONLY the JSON object with feedback section containing portfolioStrategy, projectedReturns, searchDate, marketInsights, and sources fields."""
+                }
+            ],
+        )
+
+        # Parse the response to ensure it's valid JSON
+        try:
+            json_response = json.loads(response.choices[0].message.content)
+            logger.info("Success: " + str(json_response))
+            return jsonify(json_response)
+        except json.JSONDecodeError:
+            logger.error(
+                f"Invalid JSON response from GPT: {response.choices[0].message.content}")
+            return jsonify({"error": "Invalid analysis format received"}), 500
+
+    except Exception as e:
+        logger.error(f"Error in analysePortfolio: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/ask-ai", methods=["POST"])
 def ask():
     print("LOL", request.json)
