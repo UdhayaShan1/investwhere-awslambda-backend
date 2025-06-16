@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import json
 import logging
+from constants.constants import API_QUOTA_PER_DAY
 
 load_dotenv()
 
@@ -20,6 +21,10 @@ logger.setLevel(logging.INFO)
 def index():
     return "Lambda Hello World"
 
+
+@app.route("/getApiQuota")
+def getApiQuota():
+    return jsonify({"quota": API_QUOTA_PER_DAY})
 
 @app.route("/analyseNetWorth", methods=["POST"])
 def netWorth():

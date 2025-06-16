@@ -1,0 +1,1 @@
+API_QUOTA_PER_DAY = 5
